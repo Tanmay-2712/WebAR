@@ -138,7 +138,7 @@ class WebARMaster {
         // Inject Exit Button into Overlay
         const exitBtn = document.createElement('div');
         exitBtn.innerHTML = `
-            <a href="index.html" style="position: absolute; top: 110px; left: 50%; transform: translateX(-50%); z-index: 1001; background: var(--glass); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 50px; color: white; text-decoration: none; border: 1px solid var(--glass-border); font-size: 0.8rem; pointer-events: auto;">&larr; Back to Hub</a>
+            <a href="index.html" class="exit-btn">&larr; Return to Hub</a>
         `;
         document.getElementById('overlay').appendChild(exitBtn);
 

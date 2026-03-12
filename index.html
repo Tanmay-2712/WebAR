@@ -25,21 +25,29 @@
         <div id="overlay">
             <header>
                 <h1>WebAR <span class="accent">Master</span></h1>
-                <p>Advanced Spatial Computing Portal</p>
+                <p>Select Your Precision Mode</p>
             </header>
 
             <div id="portal-hub" class="hub-layout">
-                <a href="index.html?mode=surface" id="mode-surface" class="mode-card">
+                <div class="mode-card" onclick="location.href='index.html?mode=surface'">
+                    <div class="card-glow"></div>
                     <div class="icon">🔍</div>
-                    <h3>Surface <span class="accent">Pro</span></h3>
-                    <p>High-Precision Hit-Test with Matrix Smoothing</p>
-                </a>
+                    <div class="card-content">
+                        <h3>Surface <span class="accent">Pro</span></h3>
+                        <p>High-precision spatial tracking for tables and floors. Uses WebXR Hit-Test with Matrix Smoothing.</p>
+                        <span class="badge">Advanced</span>
+                    </div>
+                </div>
 
-                <a href="card-tracking.html" id="mode-card" class="mode-card">
+                <div class="mode-card" onclick="location.href='card-tracking.html'">
+                    <div class="card-glow"></div>
                     <div class="icon">🎴</div>
-                    <h3>Card <span class="accent">Mode</span></h3>
-                    <p>Mind-AR Image Tracking for Solid Stability</p>
-                </a>
+                    <div class="card-content">
+                        <h3>Card <span class="accent">Mode</span></h3>
+                        <p>Rock-solid image tracking. Snap 3D models to a physical card for extreme stability.</p>
+                        <span class="badge">Stable</span>
+                    </div>
+                </div>
             </div>
 
             <div id="instructions" class="panel hidden">
