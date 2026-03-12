@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR - Surface Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="overlay">
+        <header>
+            <h1>Surface <span class="accent">Pro</span></h1>
+            <p>High-Precision Spatial Detection</p>
+        </header>
+
+        <div id="instructions" class="panel">
+            <div class="status-icon">
+                <div class="pulse"></div>
+            </div>
+            <p id="instruction-text">Scanning for Stable Surface...</p>
+        </div>
+
+        <div id="controls" class="hidden">
+            <button id="ar-button" class="primary-btn">INITIATE AR SESSION</button>
+        </div>
+        
+        <div id="ar-status" class="hidden">
+            <div class="indicator">
+                <span id="hit-status">Hold Phone Still to Scan...</span>
+            </div>
+        </div>
+
+        <a href="index.html" style="position: absolute; bottom: 20px; left: 20px; z-index: 1001; background: rgba(0,0,0,0.5); padding: 10px 15px; border-radius: 20px; color: white; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); font-family: sans-serif; pointer-events: auto;">&larr; Exit</a>
+    </div>
+
+    <script type="module" src="surface-pro.js"></script>
+</body>
+</html>

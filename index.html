@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR Master - High Precision</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Model Viewer for Universal Fallback -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <!-- Overlay UI -->
+        <div id="overlay">
+            <header>
+                <h1>WebAR <span class="accent">Master</span></h1>
+                <p>Advanced Spatial Computing</p>
+            </header>
+
+            <div id="instructions" class="panel">
+                <div class="loader-ring"></div>
+                <p id="instruction-text">Optimizing AR Engine...</p>
+                <button id="start-ar" class="hidden premium-btn">LAUNCH HIGH-PRECISION AR</button>
+            </div>
+
+            <div id="status-bar" class="hidden">
+                <span id="tracking-status">Scanning Surface...</span>
+            </div>
+
+            <footer>
+                <p>Triple-Phase Detection System</p>
+            </footer>
+        </div>
+
+        <!-- Fallback Model Viewer (initially hidden) -->
+        <model-viewer 
+            id="fallback-viewer"
+            class="hidden"
+            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            camera-controls
+            shadow-intensity="1"
+            auto-rotate>
+        </model-viewer>
+    </div>
+
+    <script type="module" src="surface.js"></script>
+</body>
+</html>

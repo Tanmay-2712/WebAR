@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR - Card Mode</title>
+    <!-- Mind-AR & A-Frame -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <div id="ui-overlay" style="z-index: 1000; position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none;">
+        <h1 style="color: #00f2ff; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);">Card <span style="color: white;">Mode</span></h1>
+        <p style="color: white; opacity: 0.7;">Scan the target card to see the model</p>
+    </div>
+
+    <!-- Back Button -->
+    <a href="index.html" style="position: absolute; top: 20px; left: 20px; z-index: 1001; background: rgba(0,0,0,0.5); padding: 10px 15px; border-radius: 20px; color: white; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); font-family: sans-serif;">&larr; Back</a>
+
+    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        <a-assets>
+            <a-asset-item id="astronautModel" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"></a-asset-item>
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+        <a-entity mindar-image-target="targetIndex: 0">
+            <!-- The Astronaut model on the card -->
+            <a-gltf-model src="#astronautModel" rotation="0 0 0" position="0 0 0.1" scale="0.1 0.1 0.1" animation="property: rotation; to: 0 360 0; dur: 5000; easing: linear; loop: true"></a-gltf-model>
+        </a-entity>
+    </a-scene>
+
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <p>Loading AR Image Engine...</p>
+    </div>
+
+    <script>
+        document.querySelector('a-scene').addEventListener("arReady", (event) => {
+            document.getElementById('loading-overlay').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
