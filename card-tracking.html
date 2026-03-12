@@ -6,44 +6,39 @@
     <title>WebAR - Card Precision Pro</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Mind-AR & A-Frame -->
+    <!-- Mind-AR & A-Frame Production Builds -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden; background: #000;">
     <div id="overlay">
         <!-- Minimal Header -->
-        <header style="padding-top: 15px;">
-            <p id="system-status" style="font-size: 0.7rem; letter-spacing: 3px; opacity: 0.8; margin: 0;">PRECISION TRACKER v2.0</p>
-            <h1 style="font-size: 1.5rem; margin: 5px 0;">CARD <span class="accent">PRO</span></h1>
+        <header style="margin-top: 5vh;">
+            <h1>CARD</h1>
         </header>
 
-        <!-- Scanning Guideline (Mobile-Only UI) -->
-        <div id="scan-frame" class="scan-guideline"></div>
+        <!-- Subtle Status Dot -->
+        <div id="system-status">
+            <div id="status-dot" class="status-dot"></div>
+            <span id="status-text">INITIALIZING</span>
+        </div>
+
+        <!-- Ultra-Thin Scanning Frame -->
+        <div id="scan-frame" class="scan-guideline" style="border-color: rgba(255,255,255,0.1); border-width: 1px;"></div>
         
         <div id="mobile-instruction">
-            <span id="instruction-text">Center the physical card in the frame</span>
+            <span id="instruction-text">ALIGN CARD</span>
         </div>
 
-        <!-- Feedback Panel (Initial) -->
-        <div id="scan-feedback" class="panel" style="margin-top: 20px;">
-            <div class="loader-ring" style="width: 30px; height: 30px; margin-bottom: 10px;"></div>
-            <p style="font-size: 0.8rem; margin: 0;">Initializing Image Engine...</p>
-        </div>
-
-        <!-- Target Locked Pop-up -->
-        <div id="tracking-stats" class="hidden" style="position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); padding: 8px 15px; border-radius: 20px; font-size: 0.7rem; white-space: nowrap; pointer-events: none;">
-            <span class="pulse">●</span> PRECISION LOCK ACTIVE
-        </div>
-
-        <a href="index.html" class="exit-btn">&larr; DISCONNECT</a>
+        <a href="index.html" class="exit-btn">EXIT SESSION</a>
     </div>
 
-    <!-- AR Scene with Advanced Smoothing Filters -->
+    <!-- AR Scene with Precision Parameters -->
     <a-scene 
-        mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: true; uiLoading: no; uiError: no; uiScanning: no; filterMinCF: 0.0001; filterBeta: 0.001; missTolerance: 8; warmupTolerance: 3;" 
+        id="mainScene"
+        mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: true; uiLoading: no; uiError: no; uiScanning: no; filterMinCF: 0.00001; filterBeta: 0.0005; missTolerance: 10; warmupTolerance: 2;" 
         color-space="sRGB" 
-        renderer="colorManagement: true, physicallyCorrectLights: true, antialias: true, alpha: true" 
+        renderer="colorManagement: true, physicallyCorrectLights: true, antialias: true, logarithmicDepthBuffer: true" 
         vr-mode-ui="enabled: false" 
         device-orientation-permission-ui="enabled: false">
         
@@ -53,21 +48,21 @@
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <!-- Target Entity with Smooth Model -->
-        <a-entity mindar-image-target="targetIndex: 0">
-            <a-gltf-model 
-                src="#avatarModel" 
-                rotation="0 0 0" 
-                position="0 0 0.1" 
-                scale="0.1 0.1 0.1"
-                animation="property: scale; from: 0 0 0; to: 0.1 0.1 0.1; dur: 800; easing: easeOutBack"
-                shadow="cast: true; receive: true">
-            </a-gltf-model>
-            
-            <!-- High-Precision Tracking Ring -->
-            <a-ring color="#00f2ff" radius-inner="0.48" radius-outer="0.5" rotation="0 0 0" opacity="0.4"
-                    animation="property: rotation; to: 0 0 360; dur: 4000; loop: true; easing: linear"></a-ring>
-            
+        <!-- Target Entity with Interpolated Follow -->
+        <a-entity mindar-image-target="targetIndex: 0" id="targetContainer">
+            <a-entity id="smoothWrapper">
+                <a-gltf-model 
+                    src="#avatarModel" 
+                    rotation="0 0 0" 
+                    position="0 0 0.1" 
+                    scale="0.1 0.1 0.1"
+                    animation="property: scale; from: 0 0 0; to: 0.1 0.1 0.1; dur: 800; easing: easeOutBack"
+                    shadow="cast: true; receive: true">
+                </a-gltf-model>
+                
+                <a-ring color="#00f2ff" radius-inner="0.48" radius-outer="0.5" rotation="0 0 0" opacity="0.4"
+                        animation="property: rotation; to: 0 0 360; dur: 4000; loop: true; easing: linear"></a-ring>
+            </a-entity>
             <a-plane color="#000" opacity="0.3" position="0 0 0" rotation="0 0 0" width="1" height="1" shadow="receive: true"></a-plane>
         </a-entity>
     </a-scene>
@@ -75,45 +70,47 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const sceneEl = document.querySelector('a-scene');
-            const statusText = document.getElementById('system-status');
-            const feedbackPanel = document.getElementById('scan-feedback');
-            const trackingStats = document.getElementById('tracking-stats');
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
             const scanFrame = document.getElementById('scan-frame');
             const instruction = document.getElementById('instruction-text');
             
-            // Haptic Feedback Helper
+            // 1. Hardware Detection & Optimization
+            const isHighEnd = (navigator.hardwareConcurrency || 4) > 4;
+            if (!isHighEnd) {
+                sceneEl.setAttribute('renderer', 'antialias: false; physicallyCorrectLights: false');
+            }
+
+            // 2. Haptic Feedback
             const triggerHaptic = (type = 'success') => {
                 if (window.navigator && window.navigator.vibrate) {
-                    if (type === 'success') window.navigator.vibrate([50, 30, 50]);
-                    else window.navigator.vibrate(30);
+                    if (type === 'success') window.navigator.vibrate([40, 30, 40]);
+                    else if (type === 'ready') window.navigator.vibrate(20);
                 }
             };
 
             sceneEl.addEventListener("arReady", (event) => {
-                feedbackPanel.classList.add('hidden');
-                statusText.innerText = "SENSOR READY";
-                statusText.classList.add('ar-ready-text');
+                statusText.innerText = "READY";
+                statusDot.classList.add('active');
                 triggerHaptic('ready');
             });
             
             sceneEl.addEventListener("targetFound", (event) => {
                 triggerHaptic('success');
-                trackingStats.classList.remove('hidden');
-                scanFrame.style.opacity = "0.2";
-                instruction.innerText = "ANCHOR ACQUIRED";
-                statusText.innerText = "TARGET LOCKED";
+                scanFrame.classList.add('hidden');
+                instruction.classList.add('hidden');
+                statusText.innerText = "LOCKED";
             });
             
             sceneEl.addEventListener("targetLost", (event) => {
-                trackingStats.classList.add('hidden');
-                scanFrame.style.opacity = "1";
-                instruction.innerText = "Center the physical card in the frame";
-                statusText.innerText = "RE-SCANNING...";
+                scanFrame.classList.remove('hidden');
+                instruction.classList.remove('hidden');
+                statusText.innerText = "SEARCHING";
             });
 
             sceneEl.addEventListener("arError", (event) => {
-                statusText.innerText = "CONNECTION FAILED";
-                statusText.style.color = "#ff4b4b";
+                statusText.innerText = "ERROR";
+                statusDot.style.background = "#ff4b4b";
             });
         });
     </script>

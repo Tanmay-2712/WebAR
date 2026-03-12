@@ -3,80 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAR Master - High Precision</title>
+    <title>WebAR - Minimal Pro</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Model Viewer for Universal Fallback -->
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
 </head>
 <body>
-    <div id="app">
-        <!-- Overlay UI -->
-        <div id="overlay">
-            <header>
-                <h1>WebAR <span class="accent">Master</span></h1>
-                <p>Select Your Precision Mode</p>
-            </header>
+    <div id="overlay">
+        <header>
+            <p>WEBAR SUITE v3.0</p>
+            <h1>PRO <span class="accent">AR</span></h1>
+        </header>
 
-            <div id="portal-hub" class="hub-layout">
-                <div class="mode-card" onclick="location.href='index.html?mode=surface'">
-                    <div class="card-glow"></div>
-                    <div class="icon">🔍</div>
-                    <div class="card-content">
-                        <h3>Surface <span class="accent">Pro</span></h3>
-                        <p>High-precision spatial tracking for tables and floors. Uses WebXR Hit-Test with Matrix Smoothing.</p>
-                        <span class="badge">Advanced</span>
-                    </div>
-                </div>
-
-                <div class="mode-card" onclick="location.href='card-tracking.html'">
-                    <div class="card-glow"></div>
-                    <div class="icon">🎴</div>
-                    <div class="card-content">
-                        <h3>Card <span class="accent">Mode</span></h3>
-                        <p>Rock-solid image tracking. Snap 3D models to a physical card for extreme stability.</p>
-                        <span class="badge">Stable</span>
-                    </div>
+        <div class="hub-layout">
+            <div class="mode-card" onclick="location.href='surface-pro.html'">
+                <div class="icon">◎</div>
+                <div class="card-content">
+                    <h3>SURFACE</h3>
                 </div>
             </div>
 
-            <div id="instructions" class="panel hidden">
-                <div class="loader-ring"></div>
-                <p id="instruction-text">Optimizing AR Engine...</p>
-                <button id="start-ar" class="hidden premium-btn">LAUNCH HIGH-PRECISION AR</button>
+            <div class="mode-card" onclick="location.href='card-tracking.html'">
+                <div class="icon">❒</div>
+                <div class="card-content">
+                    <h3>CARD</h3>
+                </div>
             </div>
-
-            <div id="status-bar" class="hidden">
-                <span id="tracking-status">Scanning Surface...</span>
-            </div>
-
-            <footer>
-                <p>Triple-Phase Detection System</p>
-            </footer>
         </div>
 
-        <!-- Fallback Model Viewer (initially hidden) -->
-        <model-viewer 
-            id="fallback-viewer"
-            class="hidden"
-            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-            ar
-            ar-modes="webxr scene-viewer quick-look"
-            camera-controls
-            shadow-intensity="1">
-        </model-viewer>
+        <footer style="text-align: center; opacity: 0.1; font-size: 0.6rem; letter-spacing: 5px;">
+            STABLE ENGINE READY
+        </footer>
     </div>
 
-    <script type="module" src="surface.js"></script>
+    <!-- Hidden background app container -->
+    <div id="app" class="hidden"></div>
 </body>
 </html>

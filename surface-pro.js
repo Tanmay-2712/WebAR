@@ -34,15 +34,19 @@ class AdvancedWebAR {
         const arButton = document.getElementById('ar-button');
         const instructionText = document.getElementById('instruction-text');
         const controls = document.getElementById('controls');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
 
         if (navigator.xr) {
             navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
                 if (supported) {
-                    instructionText.innerText = "Advanced Spatial Tracking Loaded.";
+                    statusText.innerText = "READY";
+                    statusDot.classList.add('active');
                     controls.classList.remove('hidden');
                     arButton.addEventListener('click', () => this.startAR());
                 } else {
-                    instructionText.innerText = "WebXR Surface tracking not supported on this device.";
+                    statusText.innerText = "UNSUPPORTED";
+                    instructionText.innerText = "WEBXR NOT FOUND";
                 }
             });
         }
@@ -60,18 +64,16 @@ class AdvancedWebAR {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.body.appendChild(this.renderer.domElement);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         this.scene.add(ambientLight);
 
         this.directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
         this.directionalLight.position.set(2, 4, 3);
         this.directionalLight.castShadow = true;
-        this.directionalLight.shadow.mapSize.set(1024, 1024);
         this.scene.add(this.directionalLight);
 
-        // Advanced Shadow Catcher
         const shadowGeo = new THREE.PlaneGeometry(10, 10).rotateX(-Math.PI / 2);
-        const shadowMat = new THREE.ShadowMaterial({ opacity: 0.5 });
+        const shadowMat = new THREE.ShadowMaterial({ opacity: 0.3 });
         this.shadowCatcher = new THREE.Mesh(shadowGeo, shadowMat);
         this.shadowCatcher.receiveShadow = true;
         this.shadowCatcher.visible = false;
@@ -81,31 +83,21 @@ class AdvancedWebAR {
     createAdvancedReticle() {
         this.reticle = new THREE.Group();
         
-        // Inner Ring
-        const innerGeom = new THREE.RingGeometry(0.04, 0.05, 32).rotateX(-Math.PI / 2);
-        const innerMat = new THREE.MeshBasicMaterial({ color: 0x00f2ff });
+        // Minimal Single Ring
+        const innerGeom = new THREE.RingGeometry(0.045, 0.05, 64).rotateX(-Math.PI / 2);
+        const innerMat = new THREE.MeshBasicMaterial({ color: 0x00f2ff, opacity: 0.5, transparent: true });
         const inner = new THREE.Mesh(innerGeom, innerMat);
         
-        // Outer Dotted Ring (Visual fluff for "high-tech" look)
-        const outerGeom = new THREE.RingGeometry(0.07, 0.08, 32, 1, 0, Math.PI * 1.5).rotateX(-Math.PI / 2);
-        const outerMat = new THREE.MeshBasicMaterial({ color: 0x7000ff, transparent: true, opacity: 0.5 });
-        const outer = new THREE.Mesh(outerGeom, outerMat);
-        
         this.reticle.add(inner);
-        this.reticle.add(outer);
-        
         this.reticle.matrixAutoUpdate = false;
         this.reticle.visible = false;
         this.scene.add(this.reticle);
-        
-        // Store for animation
-        this.reticleOuter = outer;
     }
 
     async startAR() {
         const sessionInit = { 
             requiredFeatures: ['hit-test'],
-            optionalFeatures: ['dom-overlay', 'light-estimation'],
+            optionalFeatures: ['dom-overlay'],
             domOverlay: { root: document.getElementById('overlay') }
         };
 
@@ -122,7 +114,9 @@ class AdvancedWebAR {
         this.renderer.xr.setSession(session);
         
         document.getElementById('instructions').classList.add('hidden');
+        document.getElementById('controls').classList.add('hidden');
         document.getElementById('ar-status').classList.remove('hidden');
+        document.getElementById('status-text').innerText = "CALIBRATING";
         
         session.addEventListener('select', () => this.placeObjectOnSurface());
         this.renderer.setAnimationLoop((time, frame) => this.render(time, frame));
@@ -130,11 +124,8 @@ class AdvancedWebAR {
 
     placeObjectOnSurface() {
         if (this.reticle.visible && !this.placedObject) {
-            // Load Astronaut
             this.loader.load('https://modelviewer.dev/shared-assets/models/Astronaut.glb', (gltf) => {
                 const model = gltf.scene;
-                
-                // Copy reticle position and rotation
                 this.reticle.matrix.decompose(model.position, model.quaternion, model.scale);
                 model.scale.set(0.1, 0.1, 0.1);
                 
@@ -147,12 +138,11 @@ class AdvancedWebAR {
 
                 this.scene.add(model);
                 this.placedObject = model;
-                
-                // Align shadow catcher permanently
                 this.shadowCatcher.position.copy(model.position);
                 this.shadowCatcher.visible = true;
                 
-                document.getElementById('hit-status').innerText = "Object Anchored Successfully.";
+                document.getElementById('hit-status').innerText = "ANCHORED";
+                document.getElementById('status-text').innerText = "STABLE";
             });
         }
     }
@@ -178,15 +168,11 @@ class AdvancedWebAR {
                     const hit = hitTestResults[0];
                     const hitPose = hit.getPose(referenceSpace);
                     
-                    // --- ARITHMETIC SMOOTHING ---
-                    // Instead of jumps, we lerp the matrix components
                     this.targetMatrix.fromArray(hitPose.transform.matrix);
                     
-                    // Simple smoothing (LERP) for position only for now to keep it responsive
                     if (!this.reticle.visible) {
                         this.currentMatrix.copy(this.targetMatrix);
                     } else {
-                        // Blend current and target
                         const t = this.smoothingFactor;
                         for (let i = 0; i < 16; i++) {
                             this.currentMatrix.elements[i] = this.currentMatrix.elements[i] * (1 - t) + this.targetMatrix.elements[i] * t;
@@ -196,13 +182,12 @@ class AdvancedWebAR {
                     this.reticle.visible = true;
                     this.reticle.matrix.copy(this.currentMatrix);
                     
-                    // Animate reticle
-                    this.reticleOuter.rotation.y += 0.05;
-                    
-                    document.getElementById('hit-status').innerText = "Surface Locked - Tap to Anchor Model";
+                    document.getElementById('hit-status').innerText = "TAP TO PLACE";
+                    document.getElementById('status-text').innerText = "LOCKED";
                 } else {
                     this.reticle.visible = false;
-                    document.getElementById('hit-status').innerText = "Hold Still... Detecting Surface";
+                    document.getElementById('hit-status').innerText = "FINDING SURFACE";
+                    document.getElementById('status-text').innerText = "SCANNING";
                 }
             }
         }

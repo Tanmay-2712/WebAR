@@ -19,29 +19,29 @@
 </head>
 <body>
     <div id="overlay">
-        <header>
-            <h1>Surface <span class="accent">Pro</span></h1>
-            <p>High-Precision Spatial Detection</p>
+        <header style="margin-top: 5vh;">
+            <h1>SURFACE</h1>
         </header>
 
-        <div id="instructions" class="panel">
-            <div class="status-icon">
-                <div class="pulse"></div>
-            </div>
-            <p id="instruction-text">Scanning for Stable Surface...</p>
+        <!-- Subtle Status -->
+        <div id="system-status">
+            <div id="status-dot" class="status-dot"></div>
+            <span id="status-text">INITIALIZING</span>
         </div>
 
-        <div id="controls" class="hidden">
-            <button id="ar-button" class="primary-btn">INITIATE AR SESSION</button>
+        <div id="instructions" class="panel" style="background: none; border: none; backdrop-filter: none; box-shadow: none;">
+            <p id="instruction-text" style="font-size: 0.7rem; letter-spacing: 2px;">SCANNING ENVIRONMENT</p>
+        </div>
+
+        <div id="controls" class="hidden" style="margin: auto; pointer-events: auto;">
+            <button id="ar-button" class="premium-btn">START SESSION</button>
         </div>
         
         <div id="ar-status" class="hidden">
-            <div class="indicator">
-                <span id="hit-status">Hold Phone Still to Scan...</span>
-            </div>
+            <p id="hit-status" style="position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; letter-spacing: 3px; opacity: 0.5;">FLOOR DETECTED</p>
         </div>
 
-        <a href="index.html" style="position: absolute; bottom: 20px; left: 20px; z-index: 1001; background: rgba(0,0,0,0.5); padding: 10px 15px; border-radius: 20px; color: white; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); font-family: sans-serif; pointer-events: auto;">&larr; Exit</a>
+        <a href="index.html" class="exit-btn">EXIT SESSION</a>
     </div>
 
     <script type="module" src="surface-pro.js"></script>
