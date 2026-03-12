@@ -24,6 +24,11 @@ body, html {
     font-family: var(--font-outfit);
 }
 
+/* Allow AR camera feed to show through */
+.ar-mode, .ar-mode body {
+    background-color: transparent !important;
+}
+
 #overlay {
     position: absolute;
     inset: 0;

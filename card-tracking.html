@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="ar-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -10,7 +10,7 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
-<body style="margin: 0; overflow: hidden; background: #000;">
+<body style="margin: 0; overflow: hidden; background: transparent;">
     <div id="overlay">
         <!-- Minimal Header -->
         <header style="margin-top: 5vh;">
@@ -38,7 +38,7 @@
         id="mainScene"
         mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: true; uiLoading: no; uiError: no; uiScanning: no; filterMinCF: 0.00001; filterBeta: 0.0005; missTolerance: 10; warmupTolerance: 2;" 
         color-space="sRGB" 
-        renderer="colorManagement: true, physicallyCorrectLights: true, antialias: true, logarithmicDepthBuffer: true" 
+        renderer="colorManagement: true, physicallyCorrectLights: true, antialias: true, alpha: true, logarithmicDepthBuffer: true" 
         vr-mode-ui="enabled: false" 
         device-orientation-permission-ui="enabled: false">
         
