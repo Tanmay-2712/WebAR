@@ -25,10 +25,24 @@
         <div id="overlay">
             <header>
                 <h1>WebAR <span class="accent">Master</span></h1>
-                <p>Advanced Spatial Computing</p>
+                <p>Advanced Spatial Computing Portal</p>
             </header>
 
-            <div id="instructions" class="panel">
+            <div id="portal-hub" class="hub-layout">
+                <a href="index.html?mode=surface" id="mode-surface" class="mode-card">
+                    <div class="icon">🔍</div>
+                    <h3>Surface <span class="accent">Pro</span></h3>
+                    <p>High-Precision Hit-Test with Matrix Smoothing</p>
+                </a>
+
+                <a href="card-tracking.html" id="mode-card" class="mode-card">
+                    <div class="icon">🎴</div>
+                    <h3>Card <span class="accent">Mode</span></h3>
+                    <p>Mind-AR Image Tracking for Solid Stability</p>
+                </a>
+            </div>
+
+            <div id="instructions" class="panel hidden">
                 <div class="loader-ring"></div>
                 <p id="instruction-text">Optimizing AR Engine...</p>
                 <button id="start-ar" class="hidden premium-btn">LAUNCH HIGH-PRECISION AR</button>
@@ -51,8 +65,7 @@
             ar
             ar-modes="webxr scene-viewer quick-look"
             camera-controls
-            shadow-intensity="1"
-            auto-rotate>
+            shadow-intensity="1">
         </model-viewer>
     </div>
 

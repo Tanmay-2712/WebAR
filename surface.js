@@ -34,7 +34,17 @@ class WebARMaster {
     async checkCompatibility() {
         const instructionText = document.getElementById('instruction-text');
         const startBtn = document.getElementById('start-ar');
-        const fallbackViewer = document.getElementById('fallback-viewer');
+        const portalHub = document.getElementById('portal-hub');
+        const instructions = document.getElementById('instructions');
+
+        // Handle Portal Parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+
+        if (mode === 'surface') {
+            portalHub.classList.add('hidden');
+            instructions.classList.remove('hidden');
+        }
 
         if (navigator.xr) {
             try {
@@ -124,6 +134,13 @@ class WebARMaster {
             optionalFeatures: ['dom-overlay', 'light-estimation'],
             domOverlay: { root: document.getElementById('overlay') }
         };
+
+        // Inject Exit Button into Overlay
+        const exitBtn = document.createElement('div');
+        exitBtn.innerHTML = `
+            <a href="index.html" style="position: absolute; top: 110px; left: 50%; transform: translateX(-50%); z-index: 1001; background: var(--glass); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 50px; color: white; text-decoration: none; border: 1px solid var(--glass-border); font-size: 0.8rem; pointer-events: auto;">&larr; Back to Hub</a>
+        `;
+        document.getElementById('overlay').appendChild(exitBtn);
 
         try {
             const session = await navigator.xr.requestSession('immersive-ar', sessionInit);
@@ -235,9 +252,7 @@ class WebARMaster {
         }
 
         if (this.placedObject) {
-            // Gentle idle animation
-            this.placedObject.rotation.y += 0.004;
-            this.placedObject.position.y += Math.sin(time * 0.002) * 0.0001; 
+            // Idle animation removed as per user request
         }
 
         this.renderer.render(this.scene, this.camera);

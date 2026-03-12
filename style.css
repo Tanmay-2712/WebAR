@@ -144,6 +144,61 @@ model-viewer {
     display: none !important;
 }
 
+/* Portal Hub Layout */
+.hub-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    max-width: 450px;
+    width: 100%;
+    align-self: center;
+    pointer-events: auto;
+}
+
+.mode-card {
+    background: var(--glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 1.8rem;
+    text-decoration: none;
+    color: white;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.mode-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 15px 40px rgba(0, 242, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.mode-card .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.mode-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.mode-card p {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    line-height: 1.4;
+    font-weight: 300;
+}
+
 @keyframes spin {
     to { transform: rotate(360deg); }
 }

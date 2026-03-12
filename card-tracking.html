@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR - Card Tracking</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+    <div id="overlay">
+        <header>
+            <h1>Card <span class="accent">Mode</span></h1>
+            <p>Scanning for Visual Target...</p>
+        </header>
+
+        <div id="scan-feedback" class="panel">
+            <div class="loader-ring"></div>
+            <p>Align Card within Frame</p>
+            <a href="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png" target="_blank" style="color: var(--primary); font-size: 0.8rem; margin-top: 10px; display: block;">View Target Image</a>
+        </div>
+
+        <a href="index.html" style="position: absolute; bottom: 30px; left: 30px; z-index: 1001; background: var(--glass); backdrop-filter: blur(10px); padding: 12px 25px; border-radius: 50px; color: white; text-decoration: none; border: 1px solid var(--glass-border); font-weight: 600; pointer-events: auto;">&larr; Exit Hub</a>
+    </div>
+
+    <a-scene 
+        mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind;" 
+        color-space="sRGB" 
+        renderer="colorManagement: true, physicallyCorrectLights" 
+        vr-mode-ui="enabled: false" 
+        device-orientation-permission-ui="enabled: false">
+        
+        <a-assets>
+            <a-asset-item id="avatarModel" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"></a-asset-item>
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+        <a-entity mindar-image-target="targetIndex: 0">
+            <!-- Model without auto-rotation -->
+            <a-gltf-model 
+                src="#avatarModel" 
+                rotation="0 0 0" 
+                position="0 0 0.1" 
+                scale="0.1 0.1 0.1"
+                shadow="cast: true; receive: true">
+            </a-gltf-model>
+            
+            <!-- Virtual Shadow Plane -->
+            <a-plane color="#000" opacity="0.5" position="0 0 0" rotation="0 0 0" width="1" height="1" shadow="receive: true"></a-plane>
+        </a-entity>
+    </a-scene>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sceneEl = document.querySelector('a-scene');
+            sceneEl.addEventListener("arReady", (event) => {
+                console.log("MindAR is ready");
+                document.getElementById('scan-feedback').querySelector('.loader-ring').classList.add('hidden');
+                document.getElementById('scan-feedback').querySelector('p').innerText = "Targeting System Active";
+            });
+            
+            sceneEl.addEventListener("targetFound", (event) => {
+                console.log("Target found");
+                document.getElementById('scan-feedback').classList.add('hidden');
+            });
+            
+            sceneEl.addEventListener("targetLost", (event) => {
+                console.log("Target lost");
+                document.getElementById('scan-feedback').classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
