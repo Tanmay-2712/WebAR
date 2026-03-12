@@ -44,6 +44,7 @@ class WebARMaster {
         if (mode === 'surface') {
             portalHub.classList.add('hidden');
             instructions.classList.remove('hidden');
+            document.body.classList.add('ar-active'); // Enable transparency
         }
 
         if (navigator.xr) {
@@ -138,7 +139,7 @@ class WebARMaster {
         // Inject Exit Button into Overlay
         const exitBtn = document.createElement('div');
         exitBtn.innerHTML = `
-            <a href="index.html" class="exit-btn">&larr; Return to Hub</a>
+            <a href="index.html" class="exit-btn" onclick="document.body.classList.remove('ar-active')">&larr; Return to Hub</a>
         `;
         document.getElementById('overlay').appendChild(exitBtn);
 
