@@ -327,3 +327,79 @@ canvas {
     left: 0;
     z-index: 1;
 }
+/* Mobile-First AR UI Extensions */
+.scan-guideline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 180px;
+    border: 2px solid rgba(0, 242, 255, 0.3);
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 50;
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.4);
+}
+
+.scan-guideline::after {
+    content: '';
+    position: absolute;
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    border: 2px solid var(--primary);
+    border-radius: 25px;
+    mask-image: linear-gradient(to bottom, black 20px, transparent 20px, transparent calc(100% - 20px), black calc(100% - 20px)),
+                linear-gradient(to right, black 20px, transparent 20px, transparent calc(100% - 20px), black calc(100% - 20px));
+    -webkit-mask-image: linear-gradient(to bottom, black 20px, transparent 20px, transparent calc(100% - 20px), black calc(100% - 20px)),
+                        linear-gradient(to right, black 20px, transparent 20px, transparent calc(100% - 20px), black calc(100% - 20px));
+    animation: cornerPulse 2s infinite alternate;
+}
+
+@keyframes cornerPulse {
+    from { opacity: 0.4; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1.02); }
+}
+
+#mobile-instruction {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    text-align: center;
+    font-size: 0.9rem;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    z-index: 60;
+    pointer-events: none;
+}
+
+/* Tracking Stats Overlay */
+#tracking-stats {
+    background: rgba(0, 242, 255, 0.1) !important;
+    border: 1px solid var(--primary) !important;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+}
+
+.ar-ready-text {
+    color: var(--primary) !important;
+    text-shadow: 0 0 8px rgba(0, 242, 255, 0.6);
+}
+
+/* Simplify Exit for Mobile */
+.exit-btn {
+    bottom: 25px;
+    padding: 12px 25px;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 1.8rem; letter-spacing: 2px; }
+    header p { font-size: 0.8rem; }
+    .panel { width: 90%; padding: 1.5rem; }
+    .scan-guideline { width: 220px; height: 140px; }
+}
