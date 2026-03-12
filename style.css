@@ -202,7 +202,6 @@ header p {
     border-radius: 20px;
     pointer-events: none;
     z-index: 50;
-    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.4);
 }
 
 .scan-guideline::after {
